@@ -1,5 +1,5 @@
-# SFDS microservice.py [![CircleCI](https://badgen.net/circleci/github/SFDigitalServices/microservice-py/master)](https://circleci.com/gh/SFDigitalServices/microservice-py) [![Coverage Status](https://coveralls.io/repos/github/SFDigitalServices/microservice-py/badge.svg?branch=master)](https://coveralls.io/github/SFDigitalServices/microservice-py?branch=master)
-SFDS microservice.py jumpstarts your next python-based microservice. It consists of a skeleton boilerplate make up of
+# Cloud Storage microservice.py [![CircleCI](https://badgen.net/circleci/github/SFDigitalServices/cloud-storage-microservice/master)](https://circleci.com/gh/SFDigitalServices/cloud-storage-microservice) [![Coverage Status](https://coveralls.io/repos/github/SFDigitalServices/cloud-storage-microservice/badge.svg?branch=master)](https://coveralls.io/github/SFDigitalServices/cloud-storage-microservice?branch=master)
+Cloud Storage microservice is for interfacing with cloud storage solutions.
 * [falcon](https://falconframework.org/): bare-metal Python web API framework 
 * [gunicorn](https://gunicorn.org/): Python WSGI HTTP Server for UNIX
 * [pytest](https://docs.pytest.org/en/latest/): Python testing tool 
