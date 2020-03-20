@@ -1,4 +1,4 @@
-# Cloud Storage microservice.py [![CircleCI](https://badgen.net/circleci/github/SFDigitalServices/cloud-storage-microservice/master)](https://circleci.com/gh/SFDigitalServices/cloud-storage-microservice) [![Coverage Status](https://coveralls.io/repos/github/SFDigitalServices/cloud-storage-microservice/badge.svg?branch=master)](https://coveralls.io/github/SFDigitalServices/cloud-storage-microservice?branch=master)
+# Cloud Storage microservice.py [![CircleCI](https://circleci.com/gh/SFDigitalServices/cloud-storage-microservice.svg?style=svg)](https://circleci.com/gh/SFDigitalServices/cloud-storage-microservice) [![Coverage Status](https://coveralls.io/repos/github/SFDigitalServices/cloud-storage-microservice/badge.svg?branch=master)](https://coveralls.io/github/SFDigitalServices/cloud-storage-microservice?branch=master)
 Cloud Storage microservice is for interfacing with cloud storage solutions.
 * [falcon](https://falconframework.org/): bare-metal Python web API framework 
 * [gunicorn](https://gunicorn.org/): Python WSGI HTTP Server for UNIX
