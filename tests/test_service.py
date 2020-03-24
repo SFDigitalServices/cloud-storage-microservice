@@ -118,7 +118,7 @@ def test_file(mock_env_access_key, client):
     assert response.json['status'] == "error"
 
     # boto3 client throws unexpected error
-    bucket = boto3.resource('s3').Bucket(AWS_BUCKET_NAME)
+    bucket = boto3.resource('s3').Bucket(AWS_BUCKET_NAME) # pylint: disable=no-member
     for key in bucket.objects.all():
         key.delete()
     bucket.delete()
