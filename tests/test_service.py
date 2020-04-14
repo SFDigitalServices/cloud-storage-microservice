@@ -97,23 +97,48 @@ def test_file(mock_env_access_key, client):
     with open(LOCAL_FILE_PATH, "rb") as f: # pylint: disable=invalid-name
         s3_client.upload_fileobj(f, AWS_BUCKET_NAME, OBJECT_NAME)
 
+    # non provider specified
+    response = client.simulate_get(
+        '/file',
+        params={'name': 'foo.png'}
+    )
+    assert response.status_code == 500
+
     # retrieve non existing file
     response = client.simulate_get(
-        '/bucketeer/file',
-        params={'name': 'non-existant-file.png'}
+        '/file',
+        params={
+            'name': 'non-existant-file.png',
+            'provider': 'bucketeer'
+        }
     )
+    print(response.text)
     assert response.status_code == 404
+
+    # invalid provider
+    response = client.simulate_get(
+        '/file',
+        params={
+            'name': 'non-existant-file.png',
+            'provider': 'icloud'
+        }
+    )
+    print(response.text)
+    assert response.status_code == 500
 
     # retrieve png which was uploaded in setup
     response = client.simulate_get(
-        '/bucketeer/file',
-        params={'name': OBJECT_NAME}
+        '/file',
+        params={
+            'name': OBJECT_NAME,
+            'provider': 'bucketeer'
+        }
     )
     assert response.status_code == 200
     assert response.headers['content-type'] == 'image/png'
 
     # api call with missing parameter
-    response = client.simulate_get('/bucketeer/file')
+    response = client.simulate_get('/file')
     assert response.status_code == 500
     assert response.json['status'] == "error"
 
@@ -123,7 +148,10 @@ def test_file(mock_env_access_key, client):
         key.delete()
     bucket.delete()
     response = client.simulate_get(
-        '/bucketeer/file',
-        params={'name': OBJECT_NAME}
+        '/file',
+        params={
+            'name': OBJECT_NAME,
+            'provider': 'bucketeer'
+        }
     )
     assert response.status_code == 500
