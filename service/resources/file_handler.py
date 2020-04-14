@@ -75,9 +75,8 @@ class FileHandler():
             'bucketeer': bucketeer
         }
 
-        if 'provider' in _req.params:
-            # currently just bucketeer
-            client_func = clients.get(_req.params['provider'], invalid_provider)
-            return client_func()
-        else:
+        if 'provider' not in _req.params:
             raise Exception('No provider specified in the request')
+
+        client_func = clients.get(_req.params['provider'], invalid_provider)
+        return client_func()
