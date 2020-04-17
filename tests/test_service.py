@@ -12,6 +12,8 @@ CLIENT_HEADERS = {
     "ACCESS_KEY": "1234567"
 }
 
+VERSION = "1.0"
+GET_FILE_ENDPOINT = "/" + VERSION + "/file"
 AWS_ACCESS_KEY_ID = "12345"
 AWS_SECRET_ACCESS_KEY = "shhhhh!"
 AWS_BUCKET_NAME = "its-a-secret"
@@ -97,48 +99,36 @@ def test_file(mock_env_access_key, client):
     with open(LOCAL_FILE_PATH, "rb") as f: # pylint: disable=invalid-name
         s3_client.upload_fileobj(f, AWS_BUCKET_NAME, OBJECT_NAME)
 
-    # non provider specified
-    response = client.simulate_get(
-        '/file',
-        params={'name': 'foo.png'}
-    )
-    assert response.status_code == 500
-
     # retrieve non existing file
     response = client.simulate_get(
-        '/file',
+        GET_FILE_ENDPOINT,
         params={
-            'name': 'non-existant-file.png',
-            'provider': 'bucketeer'
+            'name': 'non-existant-file.png'
         }
     )
-    print(response.text)
     assert response.status_code == 404
 
-    # invalid provider
+    # invalid version
     response = client.simulate_get(
-        '/file',
+        '/123/file',
         params={
-            'name': 'non-existant-file.png',
-            'provider': 'icloud'
+            'name': OBJECT_NAME
         }
     )
-    print(response.text)
-    assert response.status_code == 500
+    assert response.status_code == 200
 
     # retrieve png which was uploaded in setup
     response = client.simulate_get(
-        '/file',
+        GET_FILE_ENDPOINT,
         params={
-            'name': OBJECT_NAME,
-            'provider': 'bucketeer'
+            'name': OBJECT_NAME
         }
     )
     assert response.status_code == 200
     assert response.headers['content-type'] == 'image/png'
 
     # api call with missing parameter
-    response = client.simulate_get('/file')
+    response = client.simulate_get(GET_FILE_ENDPOINT)
     assert response.status_code == 500
     assert response.json['status'] == "error"
 
@@ -148,10 +138,9 @@ def test_file(mock_env_access_key, client):
         key.delete()
     bucket.delete()
     response = client.simulate_get(
-        '/file',
+        GET_FILE_ENDPOINT,
         params={
-            'name': OBJECT_NAME,
-            'provider': 'bucketeer'
+            'name': OBJECT_NAME
         }
     )
     assert response.status_code == 500

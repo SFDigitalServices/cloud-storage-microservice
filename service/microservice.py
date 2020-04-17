@@ -15,7 +15,7 @@ def start_service():
     sentry_sdk.init(os.environ.get('SENTRY_DSN'))
     # Initialize Falcon
     api = falcon.API()
-    api.add_route('/file', FileHandler())
+    api.add_route('/{version}/file', FileHandler())
     api.add_route('/welcome', Welcome())
     api.add_sink(default_error, '')
     return api

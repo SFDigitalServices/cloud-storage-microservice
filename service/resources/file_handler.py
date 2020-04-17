@@ -14,7 +14,7 @@ class FileHandler():
     """FileHandler class"""
     TEMP_FILE_DIR = "tmp/"
 
-    def on_get(self, _req, resp):
+    def on_get(self, _req, resp, version):
         #pylint: disable=no-self-use
         """
             on get request
@@ -26,7 +26,7 @@ class FileHandler():
                 temp_file_path = os.path.join(self.TEMP_FILE_DIR, object_name.replace('/', '-'))
 
                 # download the file from provider
-                client = self.determine_client(_req)
+                client = self.determine_client(version)
                 client.download_file(object_name, temp_file_path)
                 # determine content type
                 mime = magic.Magic(mime=True)
@@ -53,10 +53,9 @@ class FileHandler():
             resp.status = falcon.HTTP_500
             resp.body = json.dumps(jsend.error("{0}".format(err)))
 
-    def determine_client(self, _req):
+    def determine_client(self, version):
         #pylint: disable=no-self-use
         """ determines which client to instantiate """
-
         def bucketeer():
             """ bucketeer client """
             client = S3Client(
@@ -66,17 +65,11 @@ class FileHandler():
             )
             return client
 
-        def invalid_provider():
-            """ invalid provider """
-            raise Exception('Invalid provider specified')
-
-        # maps provider value to function
+        # maps version to client function
+        default = bucketeer
         clients = {
-            'bucketeer': bucketeer
+            '1.0': bucketeer
         }
 
-        if 'provider' not in _req.params:
-            raise Exception('No provider specified in the request')
-
-        client_func = clients.get(_req.params['provider'], invalid_provider)
+        client_func = clients.get(version, default)
         return client_func()
